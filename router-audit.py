@@ -52,12 +52,12 @@ def login(hostname, logging='on'):
 			child.expect(EN_PROMPT)
 			return child
 		elif i == 2:
-			print hostname + ",ERROR, NO CONNECTION"
+			print("{},ERROR, NO CONNECTION".format(hostname))
 			child.terminate()
 			return None
 
 	except pexpect.TIMEOUT:
-		print hostname + ", ERROR, TIMEOUT"
+		print("{}, ERROR, TIMEOUT".format(hostname))
 
 
 def worker():
