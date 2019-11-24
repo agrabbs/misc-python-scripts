@@ -53,7 +53,7 @@ class Watcher:
   def main(self):
     while True:
       self.update_list()
-      print('Sleeping for {} seconds'.format(self.WAIT))
+      sleep(self.WAIT)
 
 if __name__ == "__main__":
   watcher = Watcher()
