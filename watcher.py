@@ -1,26 +1,36 @@
-# State-less list tracker 
+# State-less top 100 tracker
+# Eventually for Discord bot. 
 from urllib.request import Request, urlopen
 from time import sleep
 import re
 
+class c:
+  HEADER = '\033[95m'
+  OKBLUE = '\033[94m'
+  OKGREEN = '\033[92m'
+  WARNING = '\033[93m'
+  FAIL = '\033[91m'
+  ENDC = '\033[0m'
+  BOLD = '\033[1m'
+  UNDERLINE = '\033[4m'
+
 class Watcher:
-  # Config
   URL = ''
   REGEX = 'detLink.*?>(.*?)<'
   USER_AGENT = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5'}
-  WAIT = 1800
+  WAIT = 600
 
   current_list = list()
   temp_list = list()
 
   def __init__(self):
-    print('Spinning up!')
+    print('{}Spinning up!{}'.format(c.OKBLUE,c.ENDC))
     self.main()
 
   def compare_lists(self):
     # List everything that has fell off the list:
     for x in list(set(self.current_list) - set(self.temp_list)):
-      print('-- {}'.format(x))
+      print('{}{}--\t{}{}'.format(c.FAIL, c.BOLD, x, c.ENDC))
 
     # Look for changes in the list
     for item in self.temp_list:
@@ -30,13 +40,15 @@ class Watcher:
           pass
         # If the position has changed:
         else:
-          diff = self.current_list.index(item) - self.temp_list.index(item)
-          if self.temp_list.index(item) < diff:
-            print('+{} {}'.format(abs(diff),item))
+          diff = (self.current_list.index(item)+1) - (self.temp_list.index(item)+1)
+          if diff > 0:
+          #if self.temp_list.index(item) < self.current_list.index(item):
+            print('{}\u2191{}{}[{}{}{}]\t{}'.format(c.OKGREEN,abs(diff),c.ENDC, c.WARNING, self.temp_list.index(item)+1, c.ENDC, item))
           else:
-            print('-{} {}'.format(abs(diff), item))
+            print('{}\u2193{}{}[{}{}{}]\t{}'.format(c.FAIL, abs(diff), c.ENDC, c.WARNING, self.temp_list.index(item)+1, c.ENDC, item))
+          diff = None
       else:
-        print('++ {} (pos: {})'.format(item,self.temp_list.index(item)+1))
+        print('{}{}++{}[{}{}{}]\t{})'.format(c.OKBLUE,c.BOLD, c.ENDC, c.WARNING, self.temp_list.index(item)+1, c.ENDC, item))
 
   def update_list(self):
     req = Request(self.URL, None, self.USER_AGENT)
