@@ -1,5 +1,5 @@
 # State-less top 100 tracker
-# Eventually for Discord bot. 
+# For Discord
 from urllib.request import Request, urlopen
 from time import sleep
 import re
